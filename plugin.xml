@@ -16,6 +16,9 @@
         <clobbers target="device" />
     </js-module>
 
+    <js-module src="test/tests.js" name="tests">
+    </js-module>
+
     <!-- firefoxos -->
     <platform name="firefoxos">
         <config-file target="config.xml" parent="/*">
