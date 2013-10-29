@@ -1,5 +1,5 @@
 exports.init = function() {
-  eval(require('org.apache.cordova.test.test').injectJasmineInterface(this, 'this'));
+  eval(require('org.apache.cordova.test-framework.test').injectJasmineInterface(this, 'this'));
 
   describe('Device Information (window.device)', function () {
     it("should exist", function() {
