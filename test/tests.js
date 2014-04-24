@@ -1,6 +1,6 @@
-exports.init = function() {
-  eval(require('org.apache.cordova.test-framework.test').injectJasmineInterface(this, 'this'));
+// Eventually, require cdvtest plugin, for now its global
 
+registerAutoTests('org.apache.cordova.device', function() {
   describe('Device Information (window.device)', function () {
     it("should exist", function() {
       expect(window.device).toBeDefined();
@@ -35,5 +35,4 @@ exports.init = function() {
       expect((new String(window.device.model)).length > 0).toBe(true);
     });
   });
-
-};
+});
