@@ -1,6 +1,4 @@
-// Eventually, require cdvtest plugin, for now its global
-
-registerAutoTests('org.apache.cordova.device', function() {
+exports.defineAutoTests = function() {
   describe('Device Information (window.device)', function () {
     it("should exist", function() {
       expect(window.device).toBeDefined();
@@ -35,4 +33,4 @@ registerAutoTests('org.apache.cordova.device', function() {
       expect((new String(window.device.model)).length > 0).toBe(true);
     });
   });
-});
+};
