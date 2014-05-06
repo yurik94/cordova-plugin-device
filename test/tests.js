@@ -34,3 +34,9 @@ exports.defineAutoTests = function() {
     });
   });
 };
+
+exports.defineManualTests = function(contentEl, createActionButton) {
+  createActionButton('Dump device', function() {
+    console.log(JSON.stringify(window.device, null, '\t'));
+  });
+};
