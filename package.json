@@ -1,5 +1,5 @@
 {
-    "name": "cordova-plugin-name",
+    "name": "cordova-plugin-device",
     "version": "0.2.13",
     "id": "org.apache.cordova.device",
     "description": "Cordova Device Plugin",
@@ -29,5 +29,4 @@
     ],
     "engines": [],
     "author": "Steve Gill"
-
 }
