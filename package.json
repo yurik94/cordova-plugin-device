@@ -12,11 +12,19 @@
     "keywords": [
         "cordova",
         "device",
-        "cordovaplugin"
+        "cordovaplugin",
+        "cordova-firefoxos",
+        "cordova-android",
+        "cordova-amazon-fireos",
+        "cordova-ubuntu",
+        "cordova-ios",
+        "cordova-blackberry",
+        "cordova-wp8",
+        "cordova-windows",
+        "cordova-browser"
     ],
     "platforms": [
         "firefoxos",
-        "tizen",
         "android",
         "amazon-fireos",
         "ubuntu",
