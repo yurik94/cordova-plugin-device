@@ -36,11 +36,14 @@ import android.app.admin.DeviceAdminReceiver;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.SystemClock;
 import android.provider.Settings;
+
+import com.google.android.gms.common.GoogleApiAvailability;
 
 public class Device extends CordovaPlugin {
     public static final String TAG = "Device";
@@ -122,6 +125,13 @@ public class Device extends CordovaPlugin {
             r.put("wifi_mac", getWifiMacAddr());
 
             r.put("ble_mac", getBLEMacAddr(cordova.getActivity().getApplicationContext()));
+
+            String googlePlayServicesVersionName = null;
+            try {
+                googlePlayServicesVersionName = cordova.getActivity().getApplicationContext().getPackageManager().getPackageInfo(GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE, 0 ).versionName;
+            } catch (PackageManager.NameNotFoundException e) {
+            }
+            r.put("googlePlayServicesVersionName", googlePlayServicesVersionName);
 
             callbackContext.success(r);
         } else {

@@ -68,6 +68,7 @@ function Device() {
     this.bootelapsed = null;
     this.wifi_mac = null;
     this.ble_mac = null;
+    this.googlePlayServicesVersionName = null;
 
     var me = this;
 
@@ -109,6 +110,7 @@ function Device() {
             me.bootelapsed = info.bootelapsed;
             me.wifi_mac = info.wifi_mac;
             me.ble_mac = info.ble_mac;
+            me.googlePlayServicesVersionName = info.googlePlayServicesVersionName;
             channel.onCordovaInfoReady.fire();
         }, function (e) {
             me.available = false;
