@@ -89,28 +89,32 @@ public class Device extends CordovaPlugin {
             r.put("isVirtual", this.isVirtual());
             r.put("serial", this.getSerialNumber());
 
-            r.put("build_bootloader", android.os.Build.BOOTLOADER);
-            r.put("build_brand", android.os.Build.BRAND);
-            r.put("build_device", android.os.Build.DEVICE);
-            r.put("build_display", android.os.Build.DISPLAY);
-            r.put("build_fingerprint", android.os.Build.FINGERPRINT);
-            r.put("build_radioversion", android.os.Build.getRadioVersion());
-            r.put("build_hardware", android.os.Build.HARDWARE);
-            r.put("build_host", android.os.Build.HOST);
-            r.put("build_id", android.os.Build.ID);
-            r.put("build_manufacturer", android.os.Build.MANUFACTURER);
-            r.put("build_model", android.os.Build.MODEL);
-            r.put("build_product", android.os.Build.PRODUCT);
-            r.put("build_tags", android.os.Build.TAGS);
-            r.put("build_time", android.os.Build.TIME);
-            r.put("build_type", android.os.Build.TYPE);
-            r.put("build_user", android.os.Build.USER);
+            r.put("build_bootloader", Build.BOOTLOADER);
+            r.put("build_brand", Build.BRAND);
+            r.put("build_device", Build.DEVICE);
+            r.put("build_display", Build.DISPLAY);
+            r.put("build_fingerprint", Build.FINGERPRINT);
+            r.put("build_radioversion", Build.getRadioVersion());
+            r.put("build_hardware", Build.HARDWARE);
+            r.put("build_host", Build.HOST);
+            r.put("build_id", Build.ID);
+            r.put("build_manufacturer", Build.MANUFACTURER);
+            r.put("build_model", Build.MODEL);
+            r.put("build_product", Build.PRODUCT);
+            r.put("build_tags", Build.TAGS);
+            r.put("build_time", Build.TIME);
+            r.put("build_type", Build.TYPE);
+            r.put("build_user", Build.USER);
 
-            r.put("buildversion_codename", android.os.Build.VERSION.CODENAME);
-            r.put("buildversion_incremental", android.os.Build.VERSION.INCREMENTAL);
-            r.put("buildversion_release", android.os.Build.VERSION.RELEASE);
-            r.put("buildversion_sdkint", android.os.Build.VERSION.SDK_INT);
-            r.put("buildversion_securitypatch", android.os.Build.VERSION.SECURITY_PATCH);
+            r.put("buildversion_codename", Build.VERSION.CODENAME);
+            r.put("buildversion_incremental", Build.VERSION.INCREMENTAL);
+            r.put("buildversion_release", Build.VERSION.RELEASE);
+            r.put("buildversion_sdkint", Build.VERSION.SDK_INT);
+            String securityPatch = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                securityPatch = Build.VERSION.SECURITY_PATCH;
+            }
+            r.put("buildversion_securitypatch", securityPatch);
 
             //ms
             r.put("bootelapsed", SystemClock.elapsedRealtime());
@@ -130,7 +134,7 @@ public class Device extends CordovaPlugin {
     // LOCAL METHODS
     //--------------------------------------------------------------------------
 
-    private static String getBLEMacAddr(Context context){
+    private static String getBLEMacAddr(Context context) {
         return android.provider.Settings.Secure.getString(context.getContentResolver(), "bluetooth_address");
     }
 
