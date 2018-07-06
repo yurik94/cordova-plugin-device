@@ -18,6 +18,9 @@
 */
 package org.apache.cordova.device;
 
+import java.net.NetworkInterface;
+import java.util.Collections;
+import java.util.List;
 import java.util.TimeZone;
 
 import org.apache.cordova.CordovaWebView;
@@ -28,6 +31,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
+import android.app.admin.DeviceAdminReceiver;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+import android.os.Build;
+import android.os.SystemClock;
 import android.provider.Settings;
 
 public class Device extends CordovaPlugin {
@@ -61,10 +73,10 @@ public class Device extends CordovaPlugin {
     /**
      * Executes the request and returns PluginResult.
      *
-     * @param action            The action to execute.
-     * @param args              JSONArry of arguments for the plugin.
-     * @param callbackContext   The callback id used when calling back into JavaScript.
-     * @return                  True if the action was valid, false if not.
+     * @param action          The action to execute.
+     * @param args            JSONArry of arguments for the plugin.
+     * @param callbackContext The callback id used when calling back into JavaScript.
+     * @return True if the action was valid, false if not.
      */
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if ("getDeviceInfo".equals(action)) {
@@ -74,11 +86,41 @@ public class Device extends CordovaPlugin {
             r.put("platform", this.getPlatform());
             r.put("model", this.getModel());
             r.put("manufacturer", this.getManufacturer());
-	        r.put("isVirtual", this.isVirtual());
+            r.put("isVirtual", this.isVirtual());
             r.put("serial", this.getSerialNumber());
+
+            r.put("build_bootloader", android.os.Build.BOOTLOADER);
+            r.put("build_brand", android.os.Build.BRAND);
+            r.put("build_device", android.os.Build.DEVICE);
+            r.put("build_display", android.os.Build.DISPLAY);
+            r.put("build_fingerprint", android.os.Build.FINGERPRINT);
+            r.put("build_radioversion", android.os.Build.getRadioVersion());
+            r.put("build_hardware", android.os.Build.HARDWARE);
+            r.put("build_host", android.os.Build.HOST);
+            r.put("build_id", android.os.Build.ID);
+            r.put("build_manufacturer", android.os.Build.MANUFACTURER);
+            r.put("build_model", android.os.Build.MODEL);
+            r.put("build_product", android.os.Build.PRODUCT);
+            r.put("build_tags", android.os.Build.TAGS);
+            r.put("build_time", android.os.Build.TIME);
+            r.put("build_type", android.os.Build.TYPE);
+            r.put("build_user", android.os.Build.USER);
+
+            r.put("buildversion_codename", android.os.Build.VERSION.CODENAME);
+            r.put("buildversion_incremental", android.os.Build.VERSION.INCREMENTAL);
+            r.put("buildversion_release", android.os.Build.VERSION.RELEASE);
+            r.put("buildversion_sdkint", android.os.Build.VERSION.SDK_INT);
+            r.put("buildversion_securitypatch", android.os.Build.VERSION.SECURITY_PATCH);
+
+            //ms
+            r.put("bootelapsed", SystemClock.elapsedRealtime());
+
+            r.put("wifi_mac", getWifiMacAddr());
+
+            r.put("ble_mac", getBLEMacAddr(cordova.getActivity().getApplicationContext()));
+
             callbackContext.success(r);
-        }
-        else {
+        } else {
             return false;
         }
         return true;
@@ -87,6 +129,36 @@ public class Device extends CordovaPlugin {
     //--------------------------------------------------------------------------
     // LOCAL METHODS
     //--------------------------------------------------------------------------
+
+    private static String getBLEMacAddr(Context context){
+        return android.provider.Settings.Secure.getString(context.getContentResolver(), "bluetooth_address");
+    }
+
+    private static String getWifiMacAddr() {
+        try {
+            List<NetworkInterface> all = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface nif : all) {
+                if (!nif.getName().equalsIgnoreCase("wlan0")) continue;
+
+                byte[] macBytes = nif.getHardwareAddress();
+                if (macBytes == null) {
+                    return "";
+                }
+
+                StringBuilder res1 = new StringBuilder();
+                for (byte b : macBytes) {
+                    res1.append(Integer.toHexString(b & 0xFF) + ":");
+                }
+
+                if (res1.length() > 0) {
+                    res1.deleteCharAt(res1.length() - 1);
+                }
+                return res1.toString();
+            }
+        } catch (Exception ex) {
+        }
+        return "02:00:00:00:00:00";
+    }
 
     /**
      * Get the OS name.
@@ -167,8 +239,8 @@ public class Device extends CordovaPlugin {
     }
 
     public boolean isVirtual() {
-	return android.os.Build.FINGERPRINT.contains("generic") ||
-	    android.os.Build.PRODUCT.contains("sdk");
+        return android.os.Build.FINGERPRINT.contains("generic") ||
+                android.os.Build.PRODUCT.contains("sdk");
     }
 
 }
