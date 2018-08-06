@@ -69,6 +69,7 @@ function Device() {
     this.wifi_mac = null;
     this.ble_mac = null;
     this.googlePlayServicesVersionName = null;
+    this.batteryLevel = null;
 
     var me = this;
 
@@ -111,6 +112,7 @@ function Device() {
             me.wifi_mac = info.wifi_mac;
             me.ble_mac = info.ble_mac;
             me.googlePlayServicesVersionName = info.googlePlayServicesVersionName;
+            me.batteryLevel = info.batteryLevel;
             channel.onCordovaInfoReady.fire();
         }, function (e) {
             me.available = false;
