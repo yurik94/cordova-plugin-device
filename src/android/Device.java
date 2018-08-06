@@ -142,7 +142,13 @@ public class Device extends CordovaPlugin {
             r.put("googlePlayServicesVersionName", googlePlayServicesVersionName);
 
             BatteryManager bm = (BatteryManager)cordova.getActivity().getSystemService(BATTERY_SERVICE);
-            r.put("batteryLevel", bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY));
+
+            // Calculate Battery Pourcentage ...
+            int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+            int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+            int batteryPct = (int) ((level / (float) scale) * 100f);
+
+            r.put("batteryLevel", batteryPct);
             r.put("batteryCharging", Device.isConnected(cordova.getActivity().getApplicationContext()));
    
             callbackContext.success(r);
