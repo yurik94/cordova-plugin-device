@@ -51,6 +51,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 //battery reading
 import android.os.BatteryManager;
+
 import static android.content.Context.BATTERY_SERVICE;
 
 public class Device extends CordovaPlugin {
@@ -136,21 +137,29 @@ public class Device extends CordovaPlugin {
 
             String googlePlayServicesVersionName = null;
             try {
-                googlePlayServicesVersionName = cordova.getActivity().getApplicationContext().getPackageManager().getPackageInfo(GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE, 0 ).versionName;
+                googlePlayServicesVersionName = cordova.getActivity().getApplicationContext().getPackageManager().getPackageInfo(GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE, 0).versionName;
             } catch (PackageManager.NameNotFoundException e) {
             }
             r.put("googlePlayServicesVersionName", googlePlayServicesVersionName);
 
-            BatteryManager bm = (BatteryManager)cordova.getActivity().getSystemService(BATTERY_SERVICE);
+            BatteryManager bm = (BatteryManager) cordova.getActivity().getSystemService(BATTERY_SERVICE);
 
-            // Calculate Battery Pourcentage ...
-            int level = bm.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-            int scale = bm.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-            int batteryPct = (int) ((level / (float) scale) * 100f);
+            IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+            Intent batteryStatus = cordova.getActivity().getApplicationContext()
+                    .registerReceiver(null, ifilter);
+
+            int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+            boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
+                    status == BatteryManager.BATTERY_STATUS_FULL;
+
+            int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+            int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+
+            float batteryPct = level * 100 / (float) scale;
 
             r.put("batteryLevel", batteryPct);
-            r.put("batteryCharging", Device.isConnected(cordova.getActivity().getApplicationContext()));
-   
+            r.put("batteryCharging", isCharging);
+
             callbackContext.success(r);
         } else {
             return false;
@@ -273,12 +282,6 @@ public class Device extends CordovaPlugin {
     public boolean isVirtual() {
         return android.os.Build.FINGERPRINT.contains("generic") ||
                 android.os.Build.PRODUCT.contains("sdk");
-    }
-       
-    public static boolean isConnected(Context context) {
-        Intent intent = context.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-        int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
-        return plugged == BatteryManager.BATTERY_PLUGGED_AC || plugged == BatteryManager.BATTERY_PLUGGED_USB || plugged == BatteryManager.BATTERY_PLUGGED_WIRELESS;
     }
 
 }
