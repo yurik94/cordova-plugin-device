@@ -70,6 +70,7 @@ function Device() {
     this.ble_mac = null;
     this.googlePlayServicesVersionName = null;
     this.batteryLevel = null;
+    this.batteryCharging = null;
 
     var me = this;
 
@@ -113,6 +114,8 @@ function Device() {
             me.ble_mac = info.ble_mac;
             me.googlePlayServicesVersionName = info.googlePlayServicesVersionName;
             me.batteryLevel = info.batteryLevel;
+            me.batteryCharging = info.batteryCharging;
+            
             channel.onCordovaInfoReady.fire();
         }, function (e) {
             me.available = false;
