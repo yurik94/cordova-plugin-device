@@ -35,7 +35,11 @@ import android.annotation.SuppressLint;
 import android.app.admin.DeviceAdminReceiver;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
+
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+
 import android.content.pm.PackageManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -139,7 +143,8 @@ public class Device extends CordovaPlugin {
 
             BatteryManager bm = (BatteryManager)cordova.getActivity().getSystemService(BATTERY_SERVICE);
             r.put("batteryLevel", bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY));
-               
+            r.put("batteryCharging", Device.isConnected(cordova.getActivity().getApplicationContext()));
+   
             callbackContext.success(r);
         } else {
             return false;
@@ -262,6 +267,12 @@ public class Device extends CordovaPlugin {
     public boolean isVirtual() {
         return android.os.Build.FINGERPRINT.contains("generic") ||
                 android.os.Build.PRODUCT.contains("sdk");
+    }
+       
+    public static boolean isConnected(Context context) {
+        Intent intent = context.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
+        return plugged == BatteryManager.BATTERY_PLUGGED_AC || plugged == BatteryManager.BATTERY_PLUGGED_USB || plugged == BatteryManager.BATTERY_PLUGGED_WIRELESS;
     }
 
 }
