@@ -45,6 +45,10 @@ import android.provider.Settings;
 
 import com.google.android.gms.common.GoogleApiAvailability;
 
+//battery reading
+import android.os.BatteryManager;
+import static android.content.Context.BATTERY_SERVICE;
+
 public class Device extends CordovaPlugin {
     public static final String TAG = "Device";
 
@@ -133,6 +137,9 @@ public class Device extends CordovaPlugin {
             }
             r.put("googlePlayServicesVersionName", googlePlayServicesVersionName);
 
+            BatteryManager bm = (BatteryManager)cordova.getActivity().getSystemService(BATTERY_SERVICE);
+            r.put("batteryLevel", bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY));
+               
             callbackContext.success(r);
         } else {
             return false;
