@@ -144,8 +144,8 @@ public class Device extends CordovaPlugin {
             BatteryManager bm = (BatteryManager)cordova.getActivity().getSystemService(BATTERY_SERVICE);
 
             // Calculate Battery Pourcentage ...
-            int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-            int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+            int level = bm.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+            int scale = bm.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
             int batteryPct = (int) ((level / (float) scale) * 100f);
 
             r.put("batteryLevel", batteryPct);
