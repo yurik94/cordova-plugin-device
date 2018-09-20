@@ -72,49 +72,50 @@ function Device() {
     this.batteryLevel = null;
     this.batteryCharging = null;
 
+    this.setDeviceInfo = function(info){
+        this.available = true;
+        this.platform = info.platform;
+        this.version = info.version;
+        this.uuid = info.uuid;
+        this.cordova = cordova.version;
+        this.model = info.model;
+        this.isVirtual = info.isVirtual;
+        this.manufacturer = info.manufacturer || 'unknown';
+        this.serial = info.serial || 'unknown';
+        this.build_bootloader = info.build_bootloader;
+        this.build_brand = info.build_brand;
+        this.build_device = info.build_device;
+        this.build_display = info.build_display;
+        this.build_fingerprint = info.build_fingerprint;
+        this.build_radioversion = info.build_radioversion;
+        this.build_hardware = info.build_hardware;
+        this.build_host = info.build_host;
+        this.build_id = info.build_id;
+        this.build_manufacturer = info.build_manufacturer;
+        this.build_model = info.build_model;
+        this.build_product = info.build_product;
+        this.build_tags = info.build_tags;
+        this.build_time = info.build_time;
+        this.build_type = info.build_type;
+        this.build_user = info.build_user;
+        this.buildversion_codename = info.buildversion_codename;
+        this.buildversion_incremental = info.buildversion_incremental;
+        this.buildversion_release = info.buildversion_release;
+        this.buildversion_sdkint = info.buildversion_sdkint;
+        this.buildversion_securitypatch = info.buildversion_securitypatch;
+        this.bootelapsed = info.bootelapsed;
+        this.wifi_mac = info.wifi_mac;
+        this.ble_mac = info.ble_mac;
+        this.googlePlayServicesVersionName = info.googlePlayServicesVersionName;
+        this.batteryLevel = info.batteryLevel;
+        this.batteryCharging = info.batteryCharging;
+    };
+
     var me = this;
 
     channel.onCordovaReady.subscribe(function () {
         me.getInfo(function (info) {
-            // ignoring info.cordova returning from native, we should use value from cordova.version defined in cordova.js
-            // TODO: CB-5105 native implementations should not return info.cordova
-            var buildLabel = cordova.version;
-            me.available = true;
-            me.platform = info.platform;
-            me.version = info.version;
-            me.uuid = info.uuid;
-            me.cordova = buildLabel;
-            me.model = info.model;
-            me.isVirtual = info.isVirtual;
-            me.manufacturer = info.manufacturer || 'unknown';
-            me.serial = info.serial || 'unknown';
-            me.build_bootloader = info.build_bootloader;
-            me.build_brand = info.build_brand;
-            me.build_device = info.build_device;
-            me.build_display = info.build_display;
-            me.build_fingerprint = info.build_fingerprint;
-            me.build_radioversion = info.build_radioversion;
-            me.build_hardware = info.build_hardware;
-            me.build_host = info.build_host;
-            me.build_id = info.build_id;
-            me.build_manufacturer = info.build_manufacturer;
-            me.build_model = info.build_model;
-            me.build_product = info.build_product;
-            me.build_tags = info.build_tags;
-            me.build_time = info.build_time;
-            me.build_type = info.build_type;
-            me.build_user = info.build_user;
-            me.buildversion_codename = info.buildversion_codename;
-            me.buildversion_incremental = info.buildversion_incremental;
-            me.buildversion_release = info.buildversion_release;
-            me.buildversion_sdkint = info.buildversion_sdkint;
-            me.buildversion_securitypatch = info.buildversion_securitypatch;
-            me.bootelapsed = info.bootelapsed;
-            me.wifi_mac = info.wifi_mac;
-            me.ble_mac = info.ble_mac;
-            me.googlePlayServicesVersionName = info.googlePlayServicesVersionName;
-            me.batteryLevel = info.batteryLevel;
-            me.batteryCharging = info.batteryCharging;
+            me.setDeviceInfo(info);
             
             channel.onCordovaInfoReady.fire();
         }, function (e) {
@@ -132,7 +133,13 @@ function Device() {
  */
 Device.prototype.getInfo = function (successCallback, errorCallback) {
     argscheck.checkArgs('fF', 'Device.getInfo', arguments);
-    exec(successCallback, errorCallback, 'Device', 'getDeviceInfo', []);
+
+    var successUpdateCallback = function(info){
+        window.device.setDeviceInfo(info);
+        successCallback(info);
+    };
+
+    exec(successUpdateCallback, errorCallback, 'Device', 'getDeviceInfo', []);
 };
 
 module.exports = new Device();
