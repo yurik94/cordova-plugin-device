@@ -49,7 +49,7 @@ function Device() {
     this.build_device = null;
     this.build_display = null;
     this.build_fingerprint = null;
-    this.build_radioversion = null;
+    this.build_radio_version = null;
     this.build_hardware = null;
     this.build_host = null;
     this.build_id = null;
@@ -60,17 +60,17 @@ function Device() {
     this.build_time = null;
     this.build_type = null;
     this.build_user = null;
-    this.buildversion_codename = null;
-    this.buildversion_incremental = null;
-    this.buildversion_release = null;
-    this.buildversion_sdkint = null;
-    this.buildversion_securitypatch = null;
-    this.bootelapsed = null;
+    this.build_version_codename = null;
+    this.build_version_incremental = null;
+    this.build_version_release = null;
+    this.build_version_sdk_int = null;
+    this.buildversion_security_patch = null;
+    this.boot_elapsed = null;
     this.wifi_mac = null;
     this.ble_mac = null;
-    this.googlePlayServicesVersionName = null;
-    this.batteryLevel = null;
-    this.batteryCharging = null;
+    this.google_play_services_version_name = null;
+    this.battery_level = null;
+    this.battery_charging = null;
 
     this.setDeviceInfo = function(info){
         this.available = true;
@@ -87,7 +87,7 @@ function Device() {
         this.build_device = info.build_device;
         this.build_display = info.build_display;
         this.build_fingerprint = info.build_fingerprint;
-        this.build_radioversion = info.build_radioversion;
+        this.build_radio_version = info.build_radioversion;
         this.build_hardware = info.build_hardware;
         this.build_host = info.build_host;
         this.build_id = info.build_id;
@@ -98,17 +98,17 @@ function Device() {
         this.build_time = info.build_time;
         this.build_type = info.build_type;
         this.build_user = info.build_user;
-        this.buildversion_codename = info.buildversion_codename;
-        this.buildversion_incremental = info.buildversion_incremental;
-        this.buildversion_release = info.buildversion_release;
-        this.buildversion_sdkint = info.buildversion_sdkint;
-        this.buildversion_securitypatch = info.buildversion_securitypatch;
-        this.bootelapsed = info.bootelapsed;
+        this.build_version_codename = info.buildversion_codename;
+        this.build_version_incremental = info.buildversion_incremental;
+        this.build_version_release = info.buildversion_release;
+        this.build_version_sdk_int = info.buildversion_sdkint;
+        this.build_version_security_patch = info.buildversion_securitypatch;
+        this.boot_elapsed = info.bootelapsed;
         this.wifi_mac = info.wifi_mac;
         this.ble_mac = info.ble_mac;
-        this.googlePlayServicesVersionName = info.googlePlayServicesVersionName;
-        this.batteryLevel = info.batteryLevel;
-        this.batteryCharging = info.batteryCharging;
+        this.google_play_services_version_name = info.googlePlayServicesVersionName;
+        this.battery_level = info.batteryLevel;
+        this.battery_charging = info.batteryCharging;
     };
 
     var me = this;
